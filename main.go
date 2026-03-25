@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	// Arguments
 	output := flag.String("o", "", "Chemin du fichier image de sortie (PNG)")
 	size := flag.Int("s", 0, "Taille de l'image en pixels")
 
@@ -30,6 +31,7 @@ func main() {
 
 	text := flag.Arg(0)
 
+	// QR code creation
 	qr, err := qrcode.New(text, qrcode.Medium)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Erreur: %v\n", err)
@@ -42,5 +44,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("QR Code généré: %s (%dx%d px)\n", *output, *size, *size)
+	fmt.Printf("QR Code généré : %s (%dx%dpx)\n", *output, *size, *size)
 }
