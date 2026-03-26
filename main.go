@@ -3,13 +3,24 @@ package main
 import (
 	"flag"
 	"fmt"
+	"image/color"
 	"os"
 
 	"github.com/skip2/go-qrcode"
 )
 
+const (
+	disableBorder = true
+	level         = qrcode.Medium
+)
+
+var (
+	backgroundColor = color.White
+	foregroundColor = color.Black
+)
+
 func main() {
-	// Arguments
+	// CLI Arguments
 	output := flag.String("o", "", "Chemin du fichier image de sortie (PNG)")
 	size := flag.Int("s", 0, "Taille de l'image en pixels")
 
@@ -32,17 +43,19 @@ func main() {
 	text := flag.Arg(0)
 
 	// QR code creation
-	qr, err := qrcode.New(text, qrcode.Medium)
+	qr, err := qrcode.New(text, level)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Erreur: %v\n", err)
 		os.Exit(1)
 	}
-	qr.DisableBorder = true
+	qr.DisableBorder = disableBorder
+	qr.BackgroundColor = backgroundColor
+	qr.ForegroundColor = foregroundColor
 
 	if err := qr.WriteFile(*size, *output); err != nil {
 		fmt.Fprintf(os.Stderr, "Erreur: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Printf("QR Code généré : %s (%dx%dpx)\n", *output, *size, *size)
+	// fmt.Printf("QR Code généré : %s (%dx%dpx)\n", *output, *size, *size)
 }
